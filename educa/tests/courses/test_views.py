@@ -31,3 +31,11 @@ class TestListView(Modelmixin, TestCase):
             reverse("course:delete", args=[self.course1.pk])
         )
         self.assertTemplateUsed(response, "courses/manage/course/delete.html")
+
+    def test_module_edit_template_used(self):
+        self.add_permission_to_user(permission="Can change module")
+        self.client.login(username="maddy", password="123")
+        response = self.client.get(
+            reverse("course:course_module_update", args=[self.course1.pk])
+        )
+        self.assertTemplateUsed(response, "courses/manage/module/formset.html")
