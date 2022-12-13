@@ -45,7 +45,6 @@ class TestListView(Modelmixin, TestCase):
         response = self.client.get(
             reverse("course:module_content_list", args=[self.course1.pk])
         )
-        print(response)
         self.assertTemplateUsed(
             response, "courses/manage/module/content_list.html"
         )
