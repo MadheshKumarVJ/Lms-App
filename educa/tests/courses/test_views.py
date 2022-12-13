@@ -38,3 +38,14 @@ class TestListView(Modelmixin, TestCase):
             reverse("course:course_module_update", args=[self.course1.pk])
         )
         self.assertTemplateUsed(response, "courses/manage/module/formset.html")
+
+    def test_module_content_list_template_used(self):
+        self.create_modules(1)
+        self.client.login(username="maddy", password="123")
+        response = self.client.get(
+            reverse("course:module_content_list", args=[self.course1.pk])
+        )
+        print(response)
+        self.assertTemplateUsed(
+            response, "courses/manage/module/content_list.html"
+        )

@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import (
     LoginRequiredMixin,
     PermissionRequiredMixin,
 )
-from .models import Course
+from .models import Course, Module
 from django.views.generic.base import TemplateResponseMixin, View
 from .forms import ModuleFormSet
 
@@ -77,3 +77,14 @@ class CourseModuleUpdateView(TemplateResponseMixin, View):
         return self.render_to_response(
             {"course": self.course, "formset": formset}
         )
+
+
+class ModuleContentListView(TemplateResponseMixin, View):
+    template_name = "courses/manage/module/content_list.html"
+
+    def get(self, request, module_id):
+        module = get_object_or_404(
+            Module, id=module_id, course__owner=request.user
+        )
+
+        return self.render_to_response({"module": module})
