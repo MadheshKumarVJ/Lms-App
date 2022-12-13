@@ -8,6 +8,7 @@ from courses.views import (
     CourseUpdateView,
     CourseModuleUpdateView,
     ModuleContentListView,
+    ContentCreateUpdateView,
 )
 
 
@@ -53,4 +54,48 @@ class TestUrls(Modelmixin, TestCase):
                 reverse("course:module_content_list", args=[self.course1.pk])
             ).func.view_class,
             ModuleContentListView,
+        )
+
+    def test_text_content_create_view_is_resolved(self):
+        module = self.create_modules(1).first()
+        self.assertEqual(
+            resolve(
+                reverse(
+                    "course:module_content_create", args=[module.id, "text"]
+                )
+            ).func.view_class,
+            ContentCreateUpdateView,
+        )
+
+    def test_image_content_create_view_is_resolved(self):
+        module = self.create_modules(1).first()
+        self.assertEqual(
+            resolve(
+                reverse(
+                    "course:module_content_create", args=[module.id, "image"]
+                )
+            ).func.view_class,
+            ContentCreateUpdateView,
+        )
+
+    def test_video_content_create_view_is_resolved(self):
+        module = self.create_modules(1).first()
+        self.assertEqual(
+            resolve(
+                reverse(
+                    "course:module_content_create", args=[module.id, "video"]
+                )
+            ).func.view_class,
+            ContentCreateUpdateView,
+        )
+
+    def test_file_content_create_view_is_resolved(self):
+        module = self.create_modules(1).first()
+        self.assertEqual(
+            resolve(
+                reverse(
+                    "course:module_content_create", args=[module.id, "file"]
+                )
+            ).func.view_class,
+            ContentCreateUpdateView,
         )

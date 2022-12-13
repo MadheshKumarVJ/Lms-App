@@ -22,4 +22,9 @@ urlpatterns = [
         views.ModuleContentListView.as_view(),
         name="module_content_list",
     ),
+    path(
+        "module/<int:module_id>/content/<model_name>/create/",
+        views.ContentCreateUpdateView.as_view(),
+        name="module_content_create",
+    ),
 ]
