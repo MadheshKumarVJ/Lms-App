@@ -55,7 +55,6 @@ class CourseDeleteView(OwnerCourseMixin, DeleteView):
 
 class CourseModuleUpdateView(TemplateResponseMixin, View):
     template_name = "courses/manage/module/formset.html"
-    course = None
 
     def get_formset(self, data=None):
         return ModuleFormSet(instance=self.course, data=data)
@@ -74,7 +73,7 @@ class CourseModuleUpdateView(TemplateResponseMixin, View):
         formset = self.get_formset(data=request.POST)
         if formset.is_valid():
             formset.save()
-            return redirect("manage_course_list")
+            return redirect("course:manage_course_list")
         return self.render_to_response(
             {"course": self.course, "formset": formset}
         )
