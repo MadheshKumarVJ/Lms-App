@@ -6,6 +6,7 @@ from courses.views import (
     CourseDeleteView,
     CourseCreateView,
     CourseUpdateView,
+    CourseModuleUpdateView,
 )
 
 
@@ -35,4 +36,12 @@ class TestUrls(Modelmixin, TestCase):
                 reverse("course:delete", args=[self.course1.pk])
             ).func.view_class,
             CourseDeleteView,
+        )
+
+    def test_course_module_update_view_is_resolved(self):
+        self.assertEqual(
+            resolve(
+                reverse("course:course_module_update", args=[self.course1.pk])
+            ).func.view_class,
+            CourseModuleUpdateView,
         )
