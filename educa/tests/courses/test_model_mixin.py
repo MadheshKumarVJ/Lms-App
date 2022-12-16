@@ -1,15 +1,12 @@
 from django.test import TestCase
 from courses.models import Subject, Course, Module
-from django.contrib.auth.models import User
-from django.contrib.auth.models import Permission
+from tests.factories import UserFactory
 
 
 class Modelmixin(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(
-            username="maddy",
-            password="123",
-        )
+        self.credentials = {"username": "maddy", "password": "123"}
+        self.user = self.create_user()
         self.subject1 = Subject.objects.create(
             title="sub1",
             slug="sub1",
@@ -28,7 +25,17 @@ class Modelmixin(TestCase):
             )
         return Module.objects.all()
 
-    def add_permission_to_user(self, permission):
-        return self.user.user_permissions.add(
-            Permission.objects.get(name=permission)
-        )
+    def create_user(self):
+        return UserFactory(**self.credentials)
+
+    def create_course(self, count, owner=None):
+        if owner is None:
+            owner = self.user
+        for _ in range(count):
+            Course.objects.create(
+                owner=owner,
+                subject=self.subject1,
+                title="course1",
+                slug="course1",
+            )
+        return Course.objects.all()
