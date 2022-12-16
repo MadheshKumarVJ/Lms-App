@@ -7,6 +7,7 @@ from courses.views import (
     CourseCreateView,
     CourseUpdateView,
     CourseModuleUpdateView,
+    ModuleContentListView,
 )
 
 
@@ -44,4 +45,12 @@ class TestUrls(Modelmixin, TestCase):
                 reverse("course:course_module_update", args=[self.course1.pk])
             ).func.view_class,
             CourseModuleUpdateView,
+        )
+
+    def test_module_content_list_view_is_resolved(self):
+        self.assertEqual(
+            resolve(
+                reverse("course:module_content_list", args=[self.course1.pk])
+            ).func.view_class,
+            ModuleContentListView,
         )
