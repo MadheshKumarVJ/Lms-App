@@ -28,7 +28,7 @@ class Modelmixin(TestCase):
     def create_user(self):
         return UserFactory(**self.credentials)
 
-    def create_course(self, count, owner=None):
+    def create_courses(self, count, owner=None):
         if owner is None:
             owner = self.user
         for _ in range(count):
