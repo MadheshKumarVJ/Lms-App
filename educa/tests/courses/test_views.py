@@ -1,10 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from tests.courses.test_model_mixin import Modelmixin
-from courses.models import Course, Module, Content
-from django.shortcuts import render, redirect, get_object_or_404
-from django.forms.models import modelform_factory
-from django.apps import apps
+
 
 
 class TestListView(Modelmixin, TestCase):
@@ -43,44 +40,24 @@ class TestListView(Modelmixin, TestCase):
         )
         self.assertTemplateUsed(response, "courses/manage/module/formset.html")
 
-    def test_module_content_list_template_used(self):
-        self.create_modules(1)
-        self.client.login(username="maddy", password="123")
-        response = self.client.get(
-            reverse("course:module_content_list", args=[self.course1.pk])
-        )
-        self.assertTemplateUsed(
-            response, "courses/manage/module/content_list.html"
-        )
+    def test_text_content_get_stored_in_module_contents(self): 
+        text_content = self.create_text()
+        module_content = self.create_module_content(content=text_content)
+        self.assertEqual(text_content ,module_content.item)
+    
+    def test_image_content_get_stored_in_module_contents(self): 
+        image_content = self.create_image()
+        module_content = self.create_module_content(content=image_content)
+        self.assertEqual(image_content ,module_content.item)
+        
+    def test_video_content_get_stored_in_module_contents(self): 
+        video_content = self.create_video_url()
+        module_content = self.create_module_content(content=video_content)
+        self.assertEqual(video_content ,module_content.item)
+    
+    def test_file_content_get_stored_in_module_contents(self): 
+        file_content = self.create_file()
+        module_content = self.create_module_content(content=file_content)
+        self.assertEqual(file_content ,module_content.item)
+    
 
-    def test_text_content_create_template_used(self):
-        module = self.create_modules(1).first()
-        self.client.login(username="maddy", password="123")
-        response = self.client.get(
-            reverse("course:module_content_create", args=[module.id, "text"])
-        )
-        self.assertTemplateUsed(response, "courses/manage/content/form.html")
-
-    def test_image_content_create_template_used(self):
-        module = self.create_modules(1).first()
-        self.client.login(username="maddy", password="123")
-        response = self.client.get(
-            reverse("course:module_content_create", args=[module.id, "image"])
-        )
-        self.assertTemplateUsed(response, "courses/manage/content/form.html")
-
-    def test_video_content_create_template_used(self):
-        module = self.create_modules(1).first()
-        self.client.login(username="maddy", password="123")
-        response = self.client.get(
-            reverse("course:module_content_create", args=[module.id, "video"])
-        )
-        self.assertTemplateUsed(response, "courses/manage/content/form.html")
-
-    def test_file_content_create_template_used(self):
-        module = self.create_modules(1).first()
-        self.client.login(username="maddy", password="123")
-        response = self.client.get(
-            reverse("course:module_content_create", args=[module.id, "file"])
-        )
-        self.assertTemplateUsed(response, "courses/manage/content/form.html")
