@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load course %}
 
 
 {% block title %}
@@ -38,7 +39,7 @@
           <div data-id="{{ content.id }}">
             {% with item=content.item %}
               <p>{{ item }}</p>
-              <a href="">
+              <a href="{% url "course:module_content_update" module.id item|model_name item.id %}">
                 Edit
               </a>
               <form action="{% url "course:module_content_delete" content.id %}" method="post">
