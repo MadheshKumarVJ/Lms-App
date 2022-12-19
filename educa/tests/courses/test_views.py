@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from tests.courses.test_model_mixin import Modelmixin
+from courses.models import Course, Module, Content
 
 
 class TestListView(Modelmixin, TestCase):
@@ -94,3 +95,20 @@ class TestListView(Modelmixin, TestCase):
             )
         )
         self.assertRedirects(response, "/course/module/1/")
+
+    def test_can_edit_contents_in_module(self):
+        self.client.login(**self.credentials)
+        module_content = self.create_module_content(content=self.create_text())
+        self.client.post(
+            reverse(
+                "course:module_content_update",
+                args=[
+                    module_content.module.id,
+                    "text",
+                    module_content.module.id,
+                ],
+            ),
+            data={"title": "updated_title", "content": "updated_content"},
+        )
+        self.assertEqual(module_content.item.title, "updated_title")
+        self.assertEqual(module_content.item.content, "updated_content")
