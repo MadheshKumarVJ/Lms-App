@@ -68,3 +68,29 @@ class TestListView(Modelmixin, TestCase):
         file_content = self.create_file()
         module_content = self.create_module_content(content=file_content)
         self.assertEqual(file_content, module_content.item)
+
+    def test_can_delete_contents_in_module(self):
+        self.client.login(**self.credentials)
+        module_content = self.create_module_content(content=self.create_text())
+        self.client.post(
+            (
+                reverse(
+                    "course:module_content_delete",
+                    args=[module_content.module.id],
+                )
+            )
+        )
+        self.assertIsNone(module_content.item)
+
+    def test_content_delete_view_redirects_to_module_content_list_page(self):
+        self.client.login(**self.credentials)
+        module_content = self.create_module_content(content=self.create_text())
+        response = self.client.post(
+            (
+                reverse(
+                    "course:module_content_delete",
+                    args=[module_content.module.id],
+                )
+            )
+        )
+        self.assertRedirects(response, "/course/module/1/")
