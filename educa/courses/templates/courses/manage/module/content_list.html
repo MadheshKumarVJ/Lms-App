@@ -41,7 +41,7 @@
               <a href="">
                 Edit
               </a>
-              <form method="post">
+              <form action="{% url "course:module_content_delete" content.id %}" method="post">
                 <input type="submit" value="Delete">
                 {% csrf_token %}
               </form>
