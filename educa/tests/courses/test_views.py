@@ -112,3 +112,9 @@ class TestListView(Modelmixin, TestCase):
         )
         self.assertEqual(module_content.item.title, "updated_title")
         self.assertEqual(module_content.item.content, "updated_content")
+
+    def test_list_view_shows_newly_added_course(self):
+        self.client.login(**self.credentials)
+        course = self.course1
+        response = self.client.get(reverse("course_list"))
+        self.assertTrue(course in response.context["courses"])
